@@ -114,12 +114,9 @@ static __u32 ksu_sulog_copy_filename_kernel(const char *filename, char *dst, __u
     if (!filename)
         return ksu_sulog_copy_empty_string(dst);
 
-    ret = strncpy(dst, filename, dst_len);
-    if (ret <= 0)
-        return ksu_sulog_copy_empty_string(dst);
-
-    if (ret >= dst_len) {
-        dst[dst_len - 1] = '\0';
+    ret = strscpy(dst, filename, dst_len);
+    if (ret < 0) {
+        /* truncated, strscpy NUL-terminates */
         return dst_len;
     }
 

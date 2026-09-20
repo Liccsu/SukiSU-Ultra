@@ -35,10 +35,12 @@ int security_context_to_sid_with_policy(struct selinux_policy *policy, const cha
 int security_sid_to_context_with_policy(struct selinux_policy *policy, u32 sid, char **scontext, u32 *scontext_len);
 void security_compute_av_user_with_policy(struct selinux_policy *policy, u32 ssid, u32 tsid, u16 tclass,
                                           struct av_decision *avd);
+#ifdef CONFIG_KSU_SUSFS
 extern void security_dump_masked_av_fn(struct policydb *policydb, struct context *scontext, struct context *tcontext,
                                        u16 tclass, u32 permissions, const char *reason);
 extern void context_struct_compute_av_fn(struct policydb *policydb, struct context *scontext, struct context *tcontext,
                                          u16 tclass, struct av_decision *avd, struct extended_perms *xperms);
+#endif
 #else
 struct selinux_state fake_state;
 #endif
@@ -464,8 +466,9 @@ static void __nocfi type_attribute_bounds_av(struct policydb *policydb, struct c
     avd->allowed &= ~masked;
 
     /* audit masked permissions */
-    if (security_dump_masked_av_fn)
-        security_dump_masked_av_fn(policydb, scontext, tcontext, tclass, masked, "bounds");
+#ifdef CONFIG_KSU_SUSFS
+    security_dump_masked_av_fn(policydb, scontext, tcontext, tclass, masked, "bounds");
+#endif
 }
 
 /*
@@ -781,11 +784,11 @@ void __nocfi security_compute_av_user_with_policy(struct selinux_policy *policy,
         goto out;
     }
 
-    if (context_struct_compute_av_fn) {
-        context_struct_compute_av_fn(policydb, scontext, tcontext, tclass, avd, NULL);
-    } else {
-        context_struct_compute_av(policydb, scontext, tcontext, tclass, avd, NULL);
-    }
+#ifdef CONFIG_KSU_SUSFS
+    context_struct_compute_av_fn(policydb, scontext, tcontext, tclass, avd, NULL);
+#else
+    context_struct_compute_av(policydb, scontext, tcontext, tclass, avd, NULL);
+#endif
 out:
     return;
 allow:

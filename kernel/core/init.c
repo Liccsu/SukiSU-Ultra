@@ -113,7 +113,7 @@ int __init kernelsu_init(void)
 
 #ifdef CONFIG_KSU_SUSFS
     susfs_init();
-#endif // #ifdef KSU_SUSFS
+#endif // CONFIG_KSU_SUSFS
 
     ksu_feature_init();
 

@@ -7,6 +7,7 @@
 #include <asm/current.h>
 #include <linux/cred.h>
 #include <linux/fs.h>
+#include <linux/jump_label.h>
 #include <linux/types.h>
 #include <linux/version.h>
 #include <linux/sched/task_stack.h>
@@ -135,10 +136,12 @@ int ksu_handle_execveat_init(struct filename *filename, struct user_arg_ptr *arg
         ret = escape_to_root_for_init();
         if (ret) {
             pr_err("escape_to_root_for_init() failed: %d\n", ret);
+            ksu_sulog_emit_pending(pending_sucompat, ret, GFP_KERNEL);
             return ret;
         }
         if (!argv_user_ptr || IS_ERR(argv_user_ptr)) {
             pr_err("!argv_user_ptr || IS_ERR(argv_user_ptr)\n");
+            ksu_sulog_emit_pending(pending_sucompat, ret, GFP_KERNEL);
             return 0;
         }
         ksu_sulog_emit_pending(pending_sucompat, ret, GFP_KERNEL);
@@ -212,6 +215,7 @@ int ksu_handle_execveat_sucompat(int *fd, struct filename **filename_ptr, void *
     const char __user *argv_user_ptr = get_user_arg_ptr(*((struct user_arg_ptr *)argv_user), 0);
     if (!argv_user_ptr || IS_ERR(argv_user_ptr)) {
         pr_err("!argv_user_ptr || IS_ERR(argv_user_ptr)\n");
+        ksu_sulog_emit_pending(pending_sucompat, ret, GFP_KERNEL);
         return -EINVAL;
     }
 

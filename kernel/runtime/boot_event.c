@@ -1,6 +1,7 @@
 #include "feature/selinux_hide.h"
 #include <linux/err.h>
 #include <linux/fs.h>
+#include <linux/jump_label.h>
 #include <linux/namei.h>
 #include <linux/printk.h>
 

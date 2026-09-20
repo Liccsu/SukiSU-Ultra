@@ -9,6 +9,7 @@
 #include <linux/err.h>
 #include <linux/file.h>
 #include <linux/fs.h>
+#include <linux/jump_label.h>
 #include <linux/version.h>
 #include <linux/input-event-codes.h>
 #include <linux/printk.h>
