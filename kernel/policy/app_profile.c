@@ -178,13 +178,7 @@ int escape_with_root_profile(void)
 
     commit_creds(cred);
 
-#if defined(CONFIG_GENERIC_ENTRY) && LINUX_VERSION_CODE >= KERNEL_VERSION(5, 11, 0)
-    if (test_syscall_work(SECCOMP))
-        disable_seccomp();
-#else
-    if (likely(test_thread_flag(TIF_SECCOMP)))
-        disable_seccomp();
-#endif
+    disable_seccomp();
 
     if (profile->flags & FLAG_KSU_NO_NEW_PRIVS) {
         set_thread_flag(TIF_KSU_DISABLE_ESCAPE_WITH_ROOT);
