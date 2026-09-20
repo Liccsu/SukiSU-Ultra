@@ -144,6 +144,12 @@ $(info -- KernelSU Manager signature size2: $(KSU_EXPECTED_SIZE2))
 $(info -- KernelSU Manager signature hash2: $(KSU_EXPECTED_HASH2))
 endif
 
+# PR build marker, decoupled from the second signature slot: the slot is a
+# generic fallback whitelist, only an explicit opt-in marks a debug build.
+ifdef KSU_PR_BUILD
+ccflags-y += -DKSU_PR_BUILD
+endif
+
 KERNEL_VERSION := $(VERSION).$(PATCHLEVEL)
 KERNEL_TYPE := Non-GKI
 # Check for GKI 2.0 (5.10+ or 6.x+)

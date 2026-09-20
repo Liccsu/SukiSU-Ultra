@@ -58,7 +58,7 @@ static int do_get_info(void __user *arg)
     if (is_manager()) {
         cmd.flags |= KSU_GET_INFO_FLAG_MANAGER;
     }
-#ifdef EXPECTED_SIZE2
+#ifdef KSU_PR_BUILD
     cmd.flags |= KSU_GET_INFO_FLAG_PR_BUILD;
 #endif
     cmd.features = KSU_FEATURE_MAX;
@@ -83,7 +83,7 @@ static int do_get_info_legacy(void __user *arg)
     if (is_manager()) {
         cmd.flags |= KSU_GET_INFO_FLAG_MANAGER;
     }
-#ifdef EXPECTED_SIZE2
+#ifdef KSU_PR_BUILD
     cmd.flags |= KSU_GET_INFO_FLAG_PR_BUILD;
 #endif
     cmd.features = KSU_FEATURE_MAX;
