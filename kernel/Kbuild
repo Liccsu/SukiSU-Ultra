@@ -83,7 +83,7 @@ obj-$(CONFIG_KSU) += kernelsu.o
 
 MDIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
-REPO_OWNER  := SukiSU-Ultra
+REPO_OWNER  := Liccsu
 REPO_NAME   := SukiSU-Ultra
 REPO_BRANCH := main
 
